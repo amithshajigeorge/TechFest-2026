@@ -1,0 +1,43 @@
+
+name: TechFest CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - feature-security
+      - feature-home
+      - feature-events
+
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install backend dependencies
+        working-directory: ./techfest-backend
+        run: npm ci
+
+      - name: Run backend tests
+        working-directory: ./techfest-backend
+        run: npm test
+
+      - name: Install frontend dependencies
+        working-directory: ./techfest2026-react
+        run: npm ci
+
+      - name: Build frontend
+        working-directory: ./techfest2026-react
+        run: npm run build
