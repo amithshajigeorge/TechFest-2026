@@ -19,7 +19,7 @@ function auth(req, res, next) {
   try {
     const decoded = jwt.verify(
       token,
-      process.env.JWT_SECRET
+      process.env.JWT_SECRET || "techfest_jwt_secret_default_key"
     );
 
     req.user = decoded;

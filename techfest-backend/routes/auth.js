@@ -124,7 +124,7 @@ router.post("/login", async (req, res, next) => {
         id: user._id,
         role: user.role
       },
-      process.env.JWT_SECRET,
+      process.env.JWT_SECRET || "techfest_jwt_secret_default_key",
       {
         expiresIn: "1h"
       }
