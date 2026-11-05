@@ -1,13 +1,23 @@
 import { Link } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
+import { API_BASE_URL } from "../config/api";
 
 function Navbar() {
   const { theme, toggleTheme } = useTheme();
 
   const token = sessionStorage.getItem("token");
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      await fetch(`${API_BASE_URL}/api/auth/logout`, {
+        method: "POST",
+        credentials: "include",
+      });
+    } catch {
+      // Ignore network errors on logout
+    }
     sessionStorage.removeItem("token");
+    sessionStorage.removeItem("user");
     window.location.href = "/login";
   };
 

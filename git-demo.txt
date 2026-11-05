@@ -1,6 +1,2 @@
 TechFest 2026 Portal
-<<<<<<< HEAD
-Version: 3.0 - Events Page
-=======
-Version: 2.0 - Home Page
->>>>>>> feature-home
+Version: 3.0 - TechFest Portal

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../config/api";
 
 function Login() {
   const [form, setForm] = useState({
@@ -24,30 +25,32 @@ function Login() {
     setLoading(true);
 
     try {
-      const response = await fetch(
-    "http://localhost:5000/api/auth/login",
-    {
+      const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
         method: "POST",
         credentials: "include",
         headers: {
-            "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(form)
-    }
-);
+        body: JSON.stringify(form),
+      });
+
       const data = await response.json();
 
       if (!response.ok) {
         throw new Error(data.message || "Login failed");
       }
 
-      if (!data.token) {
-        throw new Error("Login response did not contain a token");
+      if (data.token) {
+        sessionStorage.setItem("token", data.token);
+      } else {
+        sessionStorage.setItem("token", "cookie-session");
       }
 
-      sessionStorage.setItem("token", data.token);
-      setMessage("Login successful!");
+      if (data.user) {
+        sessionStorage.setItem("user", JSON.stringify(data.user));
+      }
 
+      setMessage("Login successful!");
       setTimeout(() => navigate("/events"), 700);
     } catch (error) {
       setMessage(error.message);

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import EventList from "../components/EventList";
+import { API_BASE_URL } from "../config/api";
 
 function Events() {
   const [events, setEvents] = useState([]);
@@ -14,9 +15,7 @@ function Events() {
         setLoading(true);
         setError("");
 
-        const response = await fetch(
-          "http://localhost:5000/api/events"
-        );
+        const response = await fetch(`${API_BASE_URL}/api/events`);
 
         const data = await response.json();
 
@@ -34,7 +33,7 @@ function Events() {
       } catch (err) {
         console.error("Events API error:", err);
         setError(
-          "Could not connect to the backend. Check that the server is running on port 5000."
+          "Could not connect to the backend. Check that the server is running."
         );
       } finally {
         setLoading(false);
