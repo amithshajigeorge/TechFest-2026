@@ -1,4 +1,3 @@
-
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -13,9 +12,23 @@ const app = express();
 // Security middleware
 app.use(helmet());
 
-// CORS configuration
+// CORS configuration (supports localhost, Netlify, Vercel, and Render)
 app.use(cors({
-  origin: process.env.FRONTEND_ORIGIN || "http://localhost:5173",
+  origin: function (origin, callback) {
+    if (
+      !origin ||
+      origin.includes("localhost") ||
+      origin.includes("127.0.0.1") ||
+      origin.includes("netlify.app") ||
+      origin.includes("vercel.app") ||
+      origin.includes("onrender.com") ||
+      (process.env.FRONTEND_ORIGIN && origin === process.env.FRONTEND_ORIGIN)
+    ) {
+      callback(null, true);
+    } else {
+      callback(new Error("CORS policy violation"));
+    }
+  },
   credentials: true
 }));
 
